@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using SR = XmlNotepad.StringResources;
 
 namespace XmlNotepad
@@ -667,6 +668,18 @@ namespace XmlNotepad
         static string GetNodeText(TreeNode n)
         {
             string text = n.Text;
+            if (text == null && ((XmlTreeNode)n).Node != null)
+            {
+                text = "";
+                foreach (XmlAttribute a in ((XmlTreeNode)n).Node.Attributes)
+                {
+                    if (text != "")
+                    {
+                        text += " ";
+                    }
+                    text += a.Name + "=\"" + a.Value + "\"";
+                }
+            }
             return NormalizeNewLines(text);
         }
 
